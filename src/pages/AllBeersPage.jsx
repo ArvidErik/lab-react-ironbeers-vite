@@ -8,22 +8,19 @@ function AllBeersPage(props) {
     const [beers, setBeers] = useState(props.beers)
     const [search, setSearch] = useState("")
 
-    const searchLogic = (e) => {
-        setSearch(e)
 
-        const newArr = [...beers].filter((beer)=>{
-            return beer.name.toLowerCase().startsWith(e)
-        })
-
-        setBeers(newArr)
-    }
 
     return (
         <div className="beer-container">
             
-            <input type="text" name="search" placeholder="Search" value={search} onChange={(e)=>searchLogic(e.target.value)}/>
+            <input type="text" name="search" placeholder="Search" value={search} onChange={(e)=>setSearch(e.target.value)}/>
 
-            {beers.map((beer)=>{
+            {beers.filter((item)=>{
+                return search.toLowerCase() === ""
+                ? item
+                : item.name.toLowerCase().includes(search) || item.tagline.toLowerCase().includes(search) || item.contributed_by.toLowerCase().includes(search)
+            })
+            .map((beer)=>{
                 return <div className="beer-card">
                     <Link to={`/beers/${beer._id}`}>
                     <img src={beer.image_url} alt="" />
